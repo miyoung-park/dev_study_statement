@@ -1,0 +1,256 @@
+Map paging = mew Map();
+
+paging.put("type", "AA");
+paging.put("keyword", "key wd")
+
+
+
+
+----------
+StringBuffer sb;
+for( key in paging){
+	sb.append( "&" + key + "=" + paging.get(key) );
+}
+
+Sb =>>>>.    "&type=AA&keyword=Key%20wd"
+
+
+
+
+
+
+-- return 값 정형화(공통규격 만들기) -- json 형태가 좋다.
+
+-- FileUtil은 컴포넌트 - 싱글톤으로 사용하거나 ,  static으로 사용
+
+
+
+jsp (제목 저자 내용 등록일 수정일)
+수정, 삭제, 쓰기
+검색(제목, 내용, 저자, 모두)
+페이징
+정렬 대상 필드 및 방법(오름,내림차순), 레코드 수 -> 사용자 선택
+보기,수정,삭제 후 리스트 유지.(검색조건)
+카테고리(정해진 카테고리 내에서 선택) 설정
+파일 첨부  1. 다중첨부 ( 갯수제한X )
+              2. 확장자 거르기 ( 서버쪽에서도 체크 ) ( 하드코딩 )  
+     3. ( 파일 하나에 10mb, 멀티파트는 100mb ), (request 크기의 제한)
+다운로드( 서블릿 통해서 다운로드 )
+
+댓글 
+게시글에 대한 답변 게시글(계층형)
+비밀번호 인증
+추천
+무한스크롤페이징( 버튼 ) -> 더 이상 게시글이 없을 땐 버튼 미작동하거나 없애주거나
+view 카운트
+변경(수정) 이력 저장 (히스토리 테이블 생성)
+html 에디터 기능
+
+---------------------------------------------------------
+조회 GET /board/list?
+보기 GET /board/{3}
+저장 POST /board/insert
+수정 PUT /board/update/{3}
+삭제 DELELTE /board/delete/{3}
+
+
+----------------------------------------------------------
+* 정형화된 에러 포맷을 만들어서 보내주는 형태로 변경
+
+* vue 단에서도 에러분기 처리
+
+* 에러코드마다 로직이 다르기때문에 그건 vue에서 처리 
+( 예를들어 , 404, 401 에러는 리스트로 보내고 싶을 때 vue에서 에러를 잡아서 다시 처리하는 형태 )
+
+* 비밀번호 입력창 모달사용해보기
+
+
+-----  STUDY -----
+* unChecked / checked
+
+* Spring JSON Object, Jackson 알아보기
+
+* VO에 @JsonIgnore 처리 관련 공부
+
+
+
+211026
+
+---- update, delete 하는 경우 
+1. 해당 게시글이 먼저 있는지/없는지를 파악 한 후에 다음 로직을 진행시킨다.
+2. 회원일 경우엔 비밀번호가 Empty이고 비회원인 경우엔 비밀번호가 Not Null이기 때문에 비번이 없는 경우엔
+바로 삭제, 비번이 있는 경우에 encoder.match를 진행한다.
+
+
+
+211030
+
+-- Controller 에서 처리하지 않은 에러는 서블렛에서 오류를 가져가게 되는데 이런 경우 @RestControllerAdvice 를 ExceptionHandler에 달아서 모든 Exception을 여기서 처리하겠다고 명시를 해준다. 그럼 Conrtroller에서 Excetpion을 try-catch로 받아서 처리안해도 ExceptionHandler에서 처리하게 된다.
+
+( 어디선가 에러는 명시해줘야 함 !)
+
+우리가 핸들러에 명시해둔 Exception을 제외한 나머지 Exception에 대해서도 처리해주는 로직을 안에 만들어야 한다. 안그럼 500번 에러가 화면에 뿌려지게 됨 !
+
+범용적인 Exception에 대해서는 컨트롤러에서 try-catch로 묶어 큰 Exception으로 던져준다.
+이 큰 Exception은 핸들러 안에 정의
+
+Exception Handler에서의 Return값을 ResponseEntity로 만들면 된다.
+
+
+
+-- @JsonIgnore을 동적으로 사용할 수 있는 방법을 고심
+
+
+
+
+211218
+최종금액만 가지고 있으면 안되고 트랜잭션만 가지고 있어도 안되고
+이전상태, 현재상태를 비교할 수 있도록
+이전의 상태를 가지고 있어야 한다,
+
+대여의 경우엔 융통성있게 반납날짜를 변경해 줄 수 있도록 설계하는 형태
+반납날짜, 대여날짜, 반납할 날짜 
+이렇게 들어가는데 대여기간을 변경할 수 잇게 하면 융통성이 떨어지니까 반납날짜를 조정할 수 있도록...
+
+연체료의 경우엔 매일 매일 업데이트 해줄 필요없이 대여현황 파악하는 홈페이지에 들어갈 때만 계산해주도록,,
+매일매일 업데이트 칠 필요 X
+
+
+관리자 - 사용자 페이지를 따로 만들 것
+같이 만들면 연관되서 처리되는 것들이 많음
+사용자로 로그인하면 사용자 페이지에서 처리,
+관리자로 로그인하면 관리자 페이지에서 처리
+사용자로 로그인하면 새로운 컴포넌트를 쓴다고 생각.
+
+포인트는 최종 포인트를 어떻게 보여줄지 생각 - 트리거 / 가장 마지막 트랜잭션 확인 등
+
+
+
+@authorityChecker
+
+
+
+
+
+
+
+220114
+
+* 인터페이스 사용
+: 스펙 공표( 이 스펙에 맞춰서 구현해라 ! )
+
+
+* code review
+ 1. Jwt는 프론트에서 다 까질 수 있기 때문에 민감정보는 넣지 않는 것이 중요 !!
+
+ 2. 이미지 삭제 + 실제로 storage에도 삭제
+
+@Transactional 사용
+
+* 대여료 일할계산해서 포인트 계산
+
+
+
+
+* 프론트 에러처리 
+: https://git.ebrainsoft.com/windfall/lab/windfall-webmvc/blob/exception-handler/front-side/user-front/src/views/board/BoardView.vue 
+참고 ! 
+
+ 
+전역 에러핸들러 -> 각 페이지에서 핸들러를 등록 ( 이 에러는 직접 핸들링 하겠다 .) ->
+
+
+
+
+220117
+* Async Await Convention 파악
+
+
+
+220121
+서버에서 HTTP_ RESPONSE
+
+우리가 하는 것 payload 안에서 200이 아닌 에러 상황일 때 body 부분을 정형화 해서 쓰겠다.
+에러 코드 , 에러 메시지 포함 
+
+{
+	errorCode: ''
+	errorMessage: ''
+}
+
+errorMessage는 써도 되고 안써도 되고 !
+
+
+기본 에러 핸들러 변경에 내가 원하는 로직을 밀어주면된다.  모든건 e 기준 
+//plugins/api-service-plugin/index.js
+
+const ApiServices = {
+    install(Vue, options) {
+        ...
+
+        /** Default error handler **/
+        //TODO: 기본 에러 핸들러 등록
+        serviceErrorEventBus.setDefaultErrorHandler(  (e)=>{
+            console.log( `my site default handler ${e.toString()}` )
+        });
+
+        ...
+
+    }
+};
+
+
+내가 이 에러는 직접 관리하겠다. 위에 method에 설정해서 분기 처리 하면 됨.
+methods:{
+        /**
+         * $apiErrorHandler 이름으로 자동으로 구독취소 됨.
+         * $apiErrorHandler 이름 변경 시 반드시 구독취소를 명시적으로 해야 함. 
+         * @param apiServiceError
+         * @returns {boolean}
+         */
+        $apiErrorHandler: (apiServiceError)=>{
+            console.log( `My Error handler ${apiServiceError.toString()}` )
+        }
+    },
+
+created() {
+        /** 
+        * ( 에러코드, 에러핸들러, propagation ) 
+        * propagation이 false라면 에러 핸들링 스택의 전파가 멈춤. (기본:true)
+        **/
+        this.$addApiErrorHandler( 'E40010', this.$apiErrorHandler, false );
+    }
+
+
+
+ reload를 하던지, router push로 하던지 로그아웃이라던지, 그런거는 
+ created() {
+        /** 
+        * ( 에러코드, 에러핸들러, propagation ) 
+        * propagation이 false라면 에러 핸들링 스택의 전파가 멈춤. (기본:true)
+        **/
+        this.$addApiErrorHandler( 'E40010', this.$apiErrorHandler, false );
+    }
+
+ 여기에 각개격파 해야한다.
+ 어떤 에러가 발생할지에  대해서 잘 알고 있어야 함.
+
+
+plugin =  vue instance에 뭐를 심어주는 것
+
+
+
+--- Store에 최대한 데이터를 많이 안 담는 것이 중요하다.
+
+예를 들어 내가 포인트를 업데이트 쳐야 하는 상황을 봤을 때 ( 포인트 적립, 차감 시 )
+마이 프로필과, 포인트 내역에서 내 총 포인트를 봐야 하기 떄문에 store에 포인트 값을 저장해두고 전역적으로 꺼내 쓰는 경우라고 생각해보자.
+이런 경우에 포인트가 적립 / 차감 될 때 service에서 포인트를 업데이트 하라고 (왜냐, store에 있는 값을 바꿔야 하니까 !) store의 action을 부르면
+action에서 poinSergvice.getTotalPoint를 찔러서 포인트 값을 가져오고, 이후에 받아온 totalPoint를 mutation으로 dispatch해서 store에 저장된 data를 바꿔준다.
+
+
+
+
+
+
+
+
