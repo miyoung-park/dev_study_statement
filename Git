@@ -28,3 +28,6 @@
 
 7. git에 올리기
 	$ git push < 브랜치 >
+
+8. git config 보기
+  $ git config --list
