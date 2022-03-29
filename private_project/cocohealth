@@ -1,0 +1,17 @@
+::: 코코헬스 :::
+
+[ 헬스장 고객 - 헬스장 ] 징검다리
+
+1. 프로젝트 목표 : 프로젝트 완료 후 : 빌드 - 배포까지 해보기( 젠킨스 사용 ! )
+
+    admin -  user
+    dev - live( db 분리 )
+
+
+
+- 개발환경
+Java / Spring_Boot
+Vue(2)
+MySQLnpm run
+Node
+Vuetify
